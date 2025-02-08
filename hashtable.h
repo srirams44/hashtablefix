@@ -16,6 +16,7 @@ public:
     void Delete(int id);
     void Resize();
     int hashFunction(int id); //Hash function to hash the student id's
+    bool exists(int id);
 
 
 private:

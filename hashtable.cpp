@@ -78,6 +78,11 @@ void hashTable::Delete(int id) {
     Node* current = table[index];
     Node* prev = nullptr;
 
+    if (studentCount == 0) {
+        cout << "There are no students to delete!" << endl;
+        return;
+    }
+
     while (current) {
         if (current->getStudent()->getID() == id) {
             if (prev) { //If not the first node, bypass this current node
@@ -137,4 +142,15 @@ void hashTable::Resize() {
      * 3. Get each student from old table, recalculate hash index and stuff them into new table
      * 4. Cleanup - delete old notes, free memory for old table, and reassign table and tablesize
  */
+}
+bool hashTable::exists(int id) {
+    int index = hashFunction(id);
+    Node* current = table[index];
+    while (current != nullptr) {
+        if (current->getStudent()->getID() == id) {
+            return true;
+        }
+        current = current->getNext();
+    }
+    return false;
 }
