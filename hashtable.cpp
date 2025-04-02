@@ -107,41 +107,55 @@ void hashTable::Delete(int id) {
 
 //Rehash/Resize function
 void hashTable::Resize() {
-    int newSize = tableSize * 2; //Double the size
-    Node** newTable = new Node*[newSize]; //Allocate a new table
+    int newSize = tableSize * 2;
+    Node** newTable = new Node*[newSize];
+
+    // Initialize the new table
+    for (int i = 0; i < newSize; ++i) {
+        newTable[i] = nullptr;
+    }
 
     for (int i = 0; i < tableSize; ++i) {
         Node* current = table[i];
         while (current) {
-            Student* student = current->getStudent();
-            int newIndex = hashFunction(student->getID()) % newSize; // New hash index
+            Student* oldStudent = current->getStudent();
 
-            // Insert into new table
-            Node* newNode = new Node(student);
+            // Create a copy of student
+            Student* newStudent = new Student(
+                oldStudent->getFName(),
+                oldStudent->getLName(),
+                oldStudent->getID(),
+                oldStudent->getGPA()
+            );
+
+            // Calculate new hash index directly
+            int newIndex = newStudent->getID() % newSize;
+
+            // Add to new table
+            Node* newNode = new Node(newStudent);
             newNode->setNext(newTable[newIndex]);
             newTable[newIndex] = newNode;
 
-            //Move into the next node
-            Node* temp = current;
+            // Move to next node
             current = current->getNext();
-            delete temp; //Free up the memory
         }
     }
 
-    //Delete the old table and re assign values
+    // Fixed deletion of old table nodes
+    for (int i = 0; i < tableSize; ++i) {
+        Node* current = table[i];
+        while (current) {
+            Node* temp = current;
+            current = current->getNext();
+            delete temp;
+        }
+    }
+
     delete[] table;
     table = newTable;
     tableSize = newSize;
 
-    //Debugging line to check if it worked
     cout << "Resized hash table to " << tableSize << " slots." << endl;
-
-    /* PSUEDOCODE:
-     * 1. Allocate new table twice the size
-     * 2. Initialize all slots in new table to nullptr
-     * 3. Get each student from old table, recalculate hash index and stuff them into new table
-     * 4. Cleanup - delete old notes, free memory for old table, and reassign table and tablesize
- */
 }
 bool hashTable::exists(int id) {
     int index = hashFunction(id);

@@ -38,7 +38,7 @@ int main() {
     // Read first names from firstnames.txt
     char fnames[100][50];
     int firstCount = 0;
-    ifstream MyReadFile("/Users/sriram/Downloads/FIRSTNAME.txt");
+    ifstream MyReadFile("FIRSTNAME.txt");
     if (!MyReadFile) {
         cout << "Error opening firstnames.txt" << endl;
         continue;
@@ -54,7 +54,7 @@ int main() {
     // Read last names from lastname.txt
     char lnames[100][50];
     int lastCount = 0;
-    ifstream MyReadFile2("/Users/sriram/Downloads/LASTNAME.txt");
+    ifstream MyReadFile2("LASTNAME.txt");
     i = 0;
     while (i < 100 && MyReadFile2.getline(lnames[i], 50)) {
         lnames[i][49] = '\0'; // Ensure null-terminated
